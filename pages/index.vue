@@ -1,13 +1,16 @@
 <template>
-  <div class="index-container">
-    <h4>Masukkan nominal yang ingin dicek</h4>
-    <input type="text" v-model="inputAmmount" @keydown.enter="checkAmmount">
-    <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
-    <div class="index-content">
-      <button class="index-content__btn" @click="checkAmmount">Check</button>
-    </div>
-    <div class="index-content" v-for="item in result" :key="item.nominal">
-      <h5>{{ item.jumlah }}x Rp {{ item.nominal }}</h5>
+  <div class="index">
+    <div class="index-container">
+      <h4>Masukkan nominal yang ingin dicek</h4>
+      <input type="text" v-model="inputAmmount" @keypress="whenKeyPress" @keydown.enter="checkAmmount" placeholder="Masukkan Nominal" :style="errorInput">
+      <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
+      <p class="index-container__info">Tekan Enter atau klik Button Check untuk mengecek nominal</p>
+      <div class="index-content">
+        <button class="index-content__btn" @click="checkAmmount">Check</button>
+      </div>
+      <div class="index-content" v-for="item in result" :key="item.nominal">
+        <h5>{{ item.jumlah }}x Rp {{ item.nominal }}</h5>
+      </div>
     </div>
   </div>
 </template>
@@ -26,6 +29,11 @@ export default {
       result: '',
       errorMsg: '',
       theValue: ''
+    }
+  },
+  computed: {
+    errorInput() {
+      return this.errorMsg ? {'borderColor': 'red'} : {}
     }
   },
   methods: {
@@ -56,8 +64,10 @@ export default {
       }
     },
     executeTheAmmount() {
-      const numberPattern = /\d+/g;
-      this.inputAmmount ? this.theValue = this.inputAmmount.match(numberPattern).join('') : this.errorMsg = 'Silahkan input nominal yang akan dicek'
+      const numberPattern = /\d+/g
+      if (this.inputAmmount) {
+        this.theValue = this.inputAmmount.match(numberPattern).join('')
+      }
       let tempAmmount = this.theValue.replace(/^0+/, '')
       if (this.theValue !== '') {
         this.errorMsg = ''
@@ -74,6 +84,9 @@ export default {
       } else if (!this.theValue) {
         this.errorMsg = 'Silahkan input nominal yang akan dicek'
       }
+    },
+    whenKeyPress() {
+      this.errorMsg = ''
     }
   }
 }
@@ -81,21 +94,38 @@ export default {
 
 <style lang="scss" scoped>
 .index {
+  margin: 0 auto;
   &-container {
-    margin: 0 auto;
     min-height: 100vh;
     margin-top: 5%;
     justify-content: center;
     align-items: center;
     text-align: center;
     input {
-      font-size: 40px;
+      font-size: 14px;
+      width: 95%;
       margin-top: 10px;
+      height: 50px;
+      position: relative;
+      border-radius: 5px;
+      outline: none;
+      padding: 5px;
+      border: 1px solid #DDDDDD;
+    }
+    @media only screen and (min-width: 1140px) {
+      input {
+        width: 25%;
+      }
     }
     &__errormsg {
       color: red;
       font-size: 18px;
       margin-top: 10px;
+    }
+    &__info {
+      font-size: 12px;
+      margin-top: 10px;
+      font-style: italic;
     }
   }
   &-content {
@@ -108,5 +138,8 @@ export default {
       border-radius: 4px;
     }
   }
+}
+.error-border {
+  border-color: red;
 }
 </style>
