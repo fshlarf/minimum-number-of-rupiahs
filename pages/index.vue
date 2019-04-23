@@ -1,6 +1,8 @@
 <template>
   <div class="index-container">
-    <input type="text" style="font-size: 40px;" v-model="inputAmmount" @keydown.enter="checkAmmount">
+    <h4>Masukkan nominal yang ingin dicek</h4>
+    <input type="text" v-model="inputAmmount" @keydown.enter="checkAmmount">
+    <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
     <div class="index-content">
       <button class="index-content__btn" @click="checkAmmount">Check</button>
     </div>
@@ -21,15 +23,45 @@ export default {
     return {
       inputAmmount: '',
       dataArray: [100000, 50000, 20000, 10000, 5000, 2000, 1000, 500, 100, 50 ],
-      result: ''
+      result: '',
+      errorMsg: '',
+      theValue: ''
     }
   },
   methods: {
-     checkAmmount() {
-      let tempAmmount = this.inputAmmount
-      if (this.inputAmmount !== '') {
-        this.arrayAmount = []
-        this.inputAmmount = JSON.parse(this.inputAmmount)
+    checkAmmount() {
+      const newArray = this.inputAmmount.split(' ')
+      if (this.inputAmmount.indexOf(',') > -1) {
+        this.errorMsg = '(Input tidak valid) karakter yang diisi tidak boleh ada koma'
+        this.result = ''
+        return
+      } else if (this.inputAmmount[0] === '0') {
+        this.errorMsg = '(Input tidak valid) Karakter yang diisi tidak boleh dimulai dari angka 0'
+        this.result = ''
+        return
+      } else {
+        if (newArray.length > 1) {
+          const fisrtArray = parseInt(newArray[0])
+          console.log(fisrtArray)
+          if (fisrtArray > 0) {
+            this.errorMsg = 'Input tidak valid'
+            this.result = ''
+            return
+          } else {
+            this.executeTheAmmount()
+          }
+        } else {
+          this.executeTheAmmount()
+        }
+      }
+    },
+    executeTheAmmount() {
+      const numberPattern = /\d+/g;
+      this.inputAmmount ? this.theValue = this.inputAmmount.match(numberPattern).join('') : this.errorMsg = 'Silahkan input nominal yang akan dicek'
+      let tempAmmount = this.theValue.replace(/^0+/, '')
+      if (this.theValue !== '') {
+        this.errorMsg = ''
+        this.theValue = JSON.parse(this.theValue)
         this.result = this.dataArray.map(e => {
           if (tempAmmount >= e) {
             let jumlah = tempAmmount / e
@@ -39,6 +71,8 @@ export default {
         }).filter(function( element ) {
           return element !== undefined
         })
+      } else if (!this.theValue) {
+        this.errorMsg = 'Silahkan input nominal yang akan dicek'
       }
     }
   }
@@ -50,10 +84,19 @@ export default {
   &-container {
     margin: 0 auto;
     min-height: 100vh;
-    margin-top: 30%;
+    margin-top: 5%;
     justify-content: center;
     align-items: center;
     text-align: center;
+    input {
+      font-size: 40px;
+      margin-top: 10px;
+    }
+    &__errormsg {
+      color: red;
+      font-size: 18px;
+      margin-top: 10px;
+    }
   }
   &-content {
     margin-top: 20px;
@@ -62,29 +105,8 @@ export default {
       color: white;
       border: 0px;
       padding: 7px 10px 7px 10px;
+      border-radius: 4px;
     }
   }
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
 }
 </style>
