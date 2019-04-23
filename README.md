@@ -1,6 +1,6 @@
 # minimum-number-of-rupiahs
 
-> Faishal&#39;s project
+> Faishal&#39;s project for Tokopedia's Software Engineer Mobile Web Coding Test
 
 ## Build Setup
 
