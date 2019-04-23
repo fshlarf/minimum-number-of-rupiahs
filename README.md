@@ -1,6 +1,7 @@
 # minimum-number-of-rupiahs
 
-> Faishal&#39;s project for Tokopedia's Software Engineer Mobile Web Coding Test
+> Faishal&#39;s project for Tokopedia's Software Engineer Mobile Web Coding Test. You can see my project on production https://min-pecahan-rupiah.herokuapp.com/.
+> Built with Vue.js Frameworks (Nuxt.js). Deployed on Heroku Cloud. For more info, please contact me faishal1303@gmail.com.
 
 ## Build Setup
 

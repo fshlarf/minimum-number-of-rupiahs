@@ -1,10 +1,11 @@
 <template>
   <div class="index">
     <div class="index-container">
+      <p class="index-container__info">faishal1303@gmail.com</p>
       <h4>Masukkan nominal yang ingin dicek</h4>
       <input type="text" v-model="inputAmmount" @keydown.enter="checkAmmount" placeholder="Masukkan Nominal" :style="errorInput">
       <transition name="slide-fade">
-          <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
+        <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
       </transition>
       <p class="index-container__info">Tekan Enter atau klik Button Check untuk mengecek nominal</p>
       <div class="index-content">
@@ -22,12 +23,7 @@
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
 export default {
-  components: {
-    Logo
-  },
   data() {
     return {
       inputAmmount: '',
@@ -89,8 +85,8 @@ export default {
             tempAmmount = tempAmmount % e
             return {'nominal': e,'jumlah' : Math.floor(jumlah)}
           }
-        }).filter(function( element ) {
-          return element !== undefined
+        }).filter( e => {
+          return e !== undefined
         })
       } else if (!this.theValue) {
         this.errorMsg = 'Silahkan input nominal yang akan dicek'
