@@ -45,26 +45,33 @@ export default {
   methods: {
     checkAmmount() {
       const newArray = this.inputAmmount.split(' ')
-      if (this.inputAmmount.indexOf(',') > -1) {
-        this.errorMsg = '(Input tidak valid) karakter yang diisi tidak boleh ada koma'
-        this.result = ''
-        return
-      } else if (this.inputAmmount[0] === '0') {
-        this.errorMsg = '(Input tidak valid) Karakter yang diisi tidak boleh dimulai dari angka 0'
-        this.result = ''
-        return
-      } else {
-        if (newArray.length > 1) {
-          if (fisrtArray > 0) {
-            this.errorMsg = 'Input tidak valid'
-            this.result = ''
-            return
+      try {
+        if (this.inputAmmount.indexOf(',') > -1) {
+          this.errorMsg = '(Input tidak valid) karakter yang diisi tidak boleh ada koma'
+          this.result = ''
+          return
+        } else if (this.inputAmmount[0] === '0') {
+          this.errorMsg = '(Input tidak valid) Karakter yang diisi tidak boleh dimulai dari angka 0'
+          this.result = ''
+          return
+        } else {
+          if (newArray.length > 1) {
+            const firstArray = parseInt(newArray[0])
+            if (firstArray > 0) {
+              this.errorMsg = 'Input tidak valid'
+              this.result = ''
+              return
+            } else {
+              this.executeTheAmmount()
+            }
           } else {
             this.executeTheAmmount()
           }
-        } else {
-          this.executeTheAmmount()
         }
+      } catch (error) {
+        this.errorMsg = 'Input Tidak Valid'
+        this.result = ''
+        return
       }
     },
     executeTheAmmount() {
