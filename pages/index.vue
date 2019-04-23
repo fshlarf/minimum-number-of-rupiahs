@@ -2,15 +2,21 @@
   <div class="index">
     <div class="index-container">
       <h4>Masukkan nominal yang ingin dicek</h4>
-      <input type="text" v-model="inputAmmount" @keypress="whenKeyPress" @keydown.enter="checkAmmount" placeholder="Masukkan Nominal" :style="errorInput">
-      <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
+      <input type="text" v-model="inputAmmount" @keydown.enter="checkAmmount" placeholder="Masukkan Nominal" :style="errorInput">
+      <transition name="slide-fade">
+          <p class="index-container__errormsg" v-if="errorMsg">{{ errorMsg }}</p>
+      </transition>
       <p class="index-container__info">Tekan Enter atau klik Button Check untuk mengecek nominal</p>
       <div class="index-content">
         <button class="index-content__btn" @click="checkAmmount">Check</button>
       </div>
-      <div class="index-content" v-for="item in result" :key="item.nominal">
-        <h5>{{ item.jumlah }}x Rp {{ item.nominal }}</h5>
-      </div>
+      <transition name="slide-fade">
+        <div v-if="result">
+          <div class="index-content" v-for="item in result" :key="item.nominal">
+            <h5>{{ item.jumlah }}x Rp {{ item.nominal }}</h5>
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -49,8 +55,6 @@ export default {
         return
       } else {
         if (newArray.length > 1) {
-          const fisrtArray = parseInt(newArray[0])
-          console.log(fisrtArray)
           if (fisrtArray > 0) {
             this.errorMsg = 'Input tidak valid'
             this.result = ''
@@ -84,9 +88,6 @@ export default {
       } else if (!this.theValue) {
         this.errorMsg = 'Silahkan input nominal yang akan dicek'
       }
-    },
-    whenKeyPress() {
-      this.errorMsg = ''
     }
   }
 }
@@ -141,5 +142,16 @@ export default {
 }
 .error-border {
   border-color: red;
+}
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>
